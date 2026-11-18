@@ -224,15 +224,8 @@
 
     <!-- 4. KATALOG PROGRAM BAHASA -->
     <section class="py-5" id="katalog">
-        <div class="container py-lg-3">
-            <div class="text-center mx-auto mb-5" style="max-width: 600px;" data-aos="fade-up">
-                <span class="badge bg-brand-soft text-brand fw-bold px-3 py-2 mb-2">Program Pilihan</span>
-                <h2 class="fw-extrabold">Jalur Pembelajaran Bahasa</h2>
-                <p class="text-muted">Pilih program bahasa sesuai kebutuhan akademik maupun karier profesional Anda.</p>
-            </div>
-
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-3" data-aos="fade-up">
+        <div class="row g-4 justify-content-center">
+                <div class="col-md-6 col-lg-5" data-aos="fade-up">
                     <div class="lang-card d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="lang-badge-code">EN</span>
@@ -240,11 +233,11 @@
                         </div>
                         <h5 class="fw-bold">Bahasa Inggris</h5>
                         <p class="text-muted small flex-grow-1">Grammar, academic writing, listening comprehension, dan public speaking.</p>
-                        <a href="{{ route('login') }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">Masuk Kelas</a>
+                        <a href="{{ auth()->check() ? route('student.courses.index') : route('login') }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">Masuk Kelas</a>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="80">
+                <div class="col-md-6 col-lg-5" data-aos="fade-up" data-aos-delay="80">
                     <div class="lang-card d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="lang-badge-code">AR</span>
@@ -252,11 +245,10 @@
                         </div>
                         <h5 class="fw-bold">Bahasa Arab</h5>
                         <p class="text-muted small flex-grow-1">Kaidah nahwu &amp; sharaf, percakapan aktif (kalam), serta pemahaman teks.</p>
-                        <a href="{{ route('login') }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">Masuk Kelas</a>
+                        <a href="{{ auth()->check() ? route('student.courses.index') : route('login') }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">Masuk Kelas</a>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
 
     <!-- 5. CARA BERGABUNG DENGAN KODE KELAS -->
@@ -273,12 +265,22 @@
                     </div>
                     <div class="col-lg-4 text-lg-end">
                         @auth
-                            <button type="button" class="btn btn-warning text-dark fw-bold px-4 py-3 rounded-3" data-bs-toggle="modal" data-bs-target="#joinCourseModal">
-                                <i class="bi bi-plus-circle-fill me-1"></i> Masukkan Kode Kelas
-                            </button>
+                            @php
+                                $dashUrl = match(Auth::user()->role) {
+                                    'admin' => url('/admin/dashboard'),
+                                    'teacher' => url('/teacher/dashboard'),
+                                    default => route('student.dashboard'),
+                                };
+                            @endphp
+                            <a href="{{ $dashUrl }}" class="btn btn-brand btn-lg fw-semibold px-4 rounded-3">
+                                Buka Dashboard Saya <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
                         @else
-                            <a href="{{ route('login') }}" class="btn btn-warning text-dark fw-bold px-4 py-3 rounded-3">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Login &amp; Gabung Kelas
+                            <a href="{{ route('login') }}" class="btn btn-brand btn-lg fw-semibold px-4 rounded-3">
+                                Mulai Belajar Sekarang <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                            <a href="#metode" class="btn btn-outline-brand btn-lg fw-semibold px-4 rounded-3">
+                                Eksplorasi Fitur
                             </a>
                         @endauth
                     </div>

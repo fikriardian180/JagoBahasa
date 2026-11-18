@@ -85,12 +85,23 @@
                         </a>
 
                         @guest
-                            <a href="{{ route('login') }}" class="btn btn-brand btn-sm fw-semibold px-4 ms-1 rounded-3">
+                            <a href="{{ route('login') }}" class="btn btn-outline-brand btn-sm fw-semibold px-3 ms-1 rounded-3">
                                 <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                            </a>
+                            <a href="{{ route('register') }}" class="btn btn-brand btn-sm fw-semibold px-3 rounded-3">
+                                Daftar
                             </a>
                         @endguest
 
                         @auth
+                            @php
+                                $dashboardUrl = match(Auth::user()->role) {
+                                    'admin' => url('/admin/dashboard'),
+                                    'teacher' => url('/teacher/dashboard'),
+                                    default => route('student.dashboard'),
+                                };
+                            @endphp
+
                             <div class="dropdown">
                                 <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle ps-2" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="avatar-circle bg-brand text-white fw-bold me-2">
@@ -101,8 +112,11 @@
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3">
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profil Saya</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ $dashboardUrl }}">
+                                            <i class="bi bi-speedometer2 me-2"></i>Dashboard Saya
+                                        </a>
+                                    </li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <form method="POST" action="{{ route('logout') }}">

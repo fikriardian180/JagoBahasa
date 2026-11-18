@@ -1,3 +1,5 @@
+/* LAYOUT LANDINGG PAGEEEEEEEEEEEEEE */
+
 :root {
     --jb-primary: #047857;
     --jb-primary-hover: #065f46;
@@ -267,3 +269,101 @@ header.sticky-top {
     background-color: var(--jb-primary);
     font-size: 1.15rem;
 }
+
+/* AKHIR LAYOUT LANDING PAGEEEEEEEEEEEEEE */
+
+/* LAYOUT STUDENT DASHBOARDDDDDDDDDDDDDDDDDDDDDDDDD */
+/* =========================================
+   LAYOUT KHUSUS PORTAL MURID (STUDENT SHELL)
+   ========================================= */
+.student-shell {
+    background-color: #f8fafc;
+}
+
+.student-sidebar {
+    width: 265px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    z-index: 1045;
+    transition: transform 0.3s ease;
+}
+
+.student-main-wrapper {
+    margin-left: 265px;
+    transition: margin-left 0.3s ease;
+}
+
+.student-topbar {
+    z-index: 1030;
+}
+
+.student-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.65rem 0.9rem;
+    border-radius: 10px;
+    color: #475569;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.student-nav-link i {
+    font-size: 1.1rem;
+    color: #64748b;
+    transition: color 0.2s ease;
+}
+
+.student-nav-link:hover {
+    background-color: var(--jb-primary-soft);
+    color: var(--jb-primary);
+}
+
+.student-nav-link:hover i {
+    color: var(--jb-primary);
+}
+
+.student-nav-link.active {
+    background-color: var(--jb-primary-soft);
+    color: var(--jb-primary);
+    font-weight: 700;
+    border-left: 3px solid var(--jb-primary);
+}
+
+.student-nav-link.active i {
+    color: var(--jb-primary);
+}
+
+/* Responsif Layar Tablet & HP (< 992px) */
+@media (max-width: 991.98px) {
+    .student-sidebar {
+        transform: translateX(-100%);
+    }
+    .student-sidebar.show {
+        transform: translateX(0);
+    }
+    .student-main-wrapper {
+        margin-left: 0;
+    }
+    .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.45);
+        z-index: 1040;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.25s ease;
+    }
+    .sidebar-backdrop.show {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+/* AKHIR LAYOUT STUDENT DASHBOARDDDDDDDDDDDDDDDDDDDDDDDDD  */
