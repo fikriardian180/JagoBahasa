@@ -1,12 +1,269 @@
-@import 'tailwindcss';
+:root {
+    --jb-primary: #047857;
+    --jb-primary-hover: #065f46;
+    --jb-primary-soft: #ecfdf5;
+    --jb-accent: #f97316;
+    --jb-bg: #f8fafc;
+    --jb-text: #0f172a;
+    --jb-muted: #64748b;
+}
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source "../**/*.blade.php";
-@source "../**/*.js";
-@source "../**/*.vue";
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--jb-bg);
+    color: var(--jb-text);
+    overflow-x: hidden;
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+h1, h2, h3, h4, h5, h6, .font-display {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.fw-extrabold {
+    font-weight: 800 !important;
+}
+
+/* --- NAVBAR --- */
+header.sticky-top {
+    z-index: 1050 !important;
+}
+
+.navbar-jb {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0;
+    transition: all 0.25s ease;
+}
+
+.navbar-jb.scrolled {
+    background-color: #ffffff !important;
+    box-shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.65rem !important;
+}
+
+.navbar .nav-link {
+    position: relative;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #475569;
+    padding: 0.5rem 0.9rem;
+    border-radius: 0.5rem;
+    transition: all 0.25s ease;
+}
+
+/* Garis indikator animasi di bawah menu */
+.navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 2px;
+    width: 0;
+    height: 3px;
+    background-color: var(--jb-primary);
+    border-radius: 4px;
+    transform: translateX(-50%);
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: var(--jb-primary) !important;
+    background-color: var(--jb-primary-soft);
+    font-weight: 700;
+}
+
+.navbar .nav-link.active::after {
+    width: 60%;
+}
+
+/* --- BUTTONS --- */
+.btn-brand {
+    background-color: var(--jb-primary);
+    border-color: var(--jb-primary);
+    color: #ffffff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.2s ease;
+}
+
+.btn-brand:hover {
+    background-color: var(--jb-primary-hover);
+    border-color: var(--jb-primary-hover);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(4, 120, 87, 0.22);
+}
+
+.btn-outline-brand {
+    color: var(--jb-primary);
+    border: 1.5px solid var(--jb-primary);
+    background: #ffffff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-brand:hover {
+    background-color: var(--jb-primary);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* --- HERO DENGAN DOT-GRID PATTERN --- */
+.hero-lms {
+    background-color: #ffffff;
+    background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+    background-size: 24px 24px;
+    padding: 72px 0 88px;
+    border-bottom: 1px solid #e2e8f0;
+    position: relative;
+}
+
+.greeting-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--jb-primary-soft);
+    border: 1px solid #a7f3d0;
+    color: var(--jb-primary);
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.dynamic-word {
+    color: var(--jb-primary);
+    border-bottom: 3px solid var(--jb-accent);
+    padding-bottom: 2px;
+    transition: opacity 0.3s ease;
+}
+
+/* --- KARTU SIMULASI DASHBOARD LMS (HERO KANAN) --- */
+.lms-preview-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.lms-preview-card:hover {
+    transform: translateY(-4px);
+}
+
+.lms-window-bar {
+    background: #f1f5f9;
+    padding: 12px 18px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.window-dots span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.course-mini-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px 16px;
+    background: #ffffff;
+    transition: all 0.25s ease;
+}
+
+.course-mini-item:hover {
+    border-color: var(--jb-primary);
+    background: var(--jb-primary-soft);
+}
+
+/* --- METRIC BAR --- */
+.metric-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid var(--jb-primary);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+}
+
+/* --- INTERACTIVE TABS METODE BELAJAR --- */
+.method-nav .nav-link {
+    background: #ffffff;
+    color: var(--jb-text);
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    text-align: left;
+    transition: all 0.25s ease;
+}
+
+.method-nav .nav-link:hover {
+    border-color: var(--jb-primary);
+}
+
+.method-nav .nav-link.active {
+    background: var(--jb-primary);
+    color: #ffffff;
+    border-color: var(--jb-primary);
+    box-shadow: 0 10px 24px rgba(4, 120, 87, 0.2);
+}
+
+.method-nav .nav-link.active small {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* --- LANGUAGE PROGRAM CARDS --- */
+.lang-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 1.5rem;
+    height: 100%;
+    transition: all 0.25s ease;
+}
+
+.lang-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--jb-primary);
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+}
+
+.lang-badge-code {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--jb-primary-soft);
+    color: var(--jb-primary);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.avatar-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+}
+
+.text-brand { color: var(--jb-primary) !important; }
+.bg-brand { background-color: var(--jb-primary) !important; }
+.bg-brand-soft { background-color: var(--jb-primary-soft) !important; }
+
+.brand-icon {
+    width: 36px;
+    height: 36px;
+    background-color: var(--jb-primary);
+    font-size: 1.15rem;
 }
