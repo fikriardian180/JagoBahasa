@@ -233,7 +233,7 @@
     </section>
 
     <!-- 4. KATALOG PROGRAM BAHASA -->
-    <section class="py-5" id="program">
+    <section class="py-5" id="katalog">
         <div class="container">
             <div class="row g-4 justify-content-center">
                 <div class="col-md-6 col-lg-5" data-aos="fade-up">
@@ -264,7 +264,7 @@
     </section>
 
     <!-- 5. CARA BERGABUNG DENGAN KODE KELAS -->
-    <section class="py-5" id="cara-bergabung">
+    <section class="py-5" id="panduan">
         <div class="container">
             <div class="rounded-4 p-4 p-md-5 text-white" style="background: linear-gradient(120deg, #047857 0%, #064e3b 100%);" data-aos="zoom-in">
                 <div class="row align-items-center gy-4">
