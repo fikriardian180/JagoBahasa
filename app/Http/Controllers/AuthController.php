@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -19,25 +20,27 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+            'role' => ['required', 'in:student,teacher,admin'],
+        ], [
+            'role.required' => 'Silakan pilih peran akun (Murid atau Guru).',
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            // Arahkan otomatis sesuai role akun
             $role = Auth::user()->role;
             if ($role === 'admin') {
                 return redirect()->intended('/admin/dashboard');
             } elseif ($role === 'teacher') {
-                return redirect()->intended('/teacher/dashboard');
+                return redirect()->intended(route('teacher.dashboard'));
             }
 
             return redirect()->intended(route('student.dashboard'));
         }
 
         return back()->withErrors([
-            'email' => 'Email atau kata sandi yang Anda masukkan salah.',
-        ])->onlyInput('email');
+            'email' => 'Email, kata sandi, atau peran akun yang Anda pilih tidak cocok.',
+        ])->onlyInput('email', 'role');
     }
 
     public function showRegister()
@@ -49,9 +52,17 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'role' => ['required', 'in:student,teacher'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->where(fn ($query) => $query->where('role', $request->role)),
+            ],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ], [
+            'email.unique' => 'Email ini sudah terdaftar sebagai ' . ($request->role === 'teacher' ? 'Guru (Pengajar)' : 'Murid') . '.',
         ]);
 
         $user = User::create([
@@ -64,7 +75,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         if ($user->role === 'teacher') {
-            return redirect('/teacher/dashboard');
+            return redirect()->route('teacher.dashboard');
         }
 
         return redirect()->route('student.dashboard');
