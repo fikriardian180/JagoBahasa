@@ -24,7 +24,7 @@
 
                     <div class="d-flex flex-wrap gap-3">
                         @auth
-                            <a href="#" class="btn btn-brand btn-lg fw-semibold px-4 rounded-3">
+                            <a href="{{ route('student.dashboard') }}" class="btn btn-brand btn-lg fw-semibold px-4 rounded-3">
                                 Buka Dashboard Saya <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         @else

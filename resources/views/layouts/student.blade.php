@@ -61,27 +61,31 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('/student/courses') }}" class="student-nav-link {{ request()->is('student/courses*') ? 'active' : '' }}">
+                    <a href="{{ route('student.courses.index') }}" class="student-nav-link {{ request()->is('student/courses*') ? 'active' : '' }}">
                         <i class="bi bi-journal-bookmark-fill"></i>
                         <span>Kursus Saya</span>
-                        <span class="badge bg-brand-soft text-brand ms-auto rounded-pill">3</span>
+                        @if(($sidebarCoursesCount ?? 0) > 0)
+                            <span class="badge bg-brand-soft text-brand ms-auto rounded-pill">{{ $sidebarCoursesCount }}</span>
+                        @endif
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('/student/assignments') }}" class="student-nav-link {{ request()->is('student/assignments*') ? 'active' : '' }}">
+                    <a href="{{ route('student.assignments.index') }}" class="student-nav-link {{ request()->is('student/assignments*') ? 'active' : '' }}">
                         <i class="bi bi-clipboard2-check-fill"></i>
                         <span>Tugas &amp; Kuis</span>
-                        <span class="badge bg-warning text-dark ms-auto rounded-pill">2</span>
+                        @if(($sidebarPendingTasksCount ?? 0) > 0)
+                            <span class="badge bg-warning text-dark ms-auto rounded-pill">{{ $sidebarPendingTasksCount }}</span>
+                        @endif
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('/student/live-classes') }}" class="student-nav-link {{ request()->is('student/live-classes*') ? 'active' : '' }}">
+                    <a href="{{ route('student.live-classes') }}" class="student-nav-link {{ request()->is('student/live-classes*') ? 'active' : '' }}">
                         <i class="bi bi-camera-video-fill"></i>
                         <span>Kelas Online</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('/student/calendar') }}" class="student-nav-link {{ request()->is('student/calendar*') ? 'active' : '' }}">
+                    <a href="{{ route('student.calendar') }}" class="student-nav-link {{ request()->is('student/calendar*') ? 'active' : '' }}">
                         <i class="bi bi-calendar3"></i>
                         <span>Kalender Jadwal</span>
                     </a>
@@ -93,7 +97,7 @@
             </small>
             <ul class="nav flex-column gap-1">
                 <li class="nav-item">
-                    <a href="{{ url('/student/grades') }}" class="student-nav-link {{ request()->is('student/grades*') ? 'active' : '' }}">
+                    <a href="{{ route('student.grades') }}" class="student-nav-link {{ request()->is('student/grades*') ? 'active' : '' }}">
                         <i class="bi bi-bar-chart-line-fill"></i>
                         <span>Nilai &amp; Progres</span>
                     </a>
@@ -154,22 +158,34 @@
                     <div class="dropdown">
                         <button class="btn btn-light btn-sm border rounded-3 position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifikasi">
                             <i class="bi bi-bell"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                            @if(($studentNotifications ?? collect())->isNotEmpty())
+                                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                            @endif
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 p-2" style="width: 280px;">
-                            <li class="px-2 py-1 fw-bold small border-bottom mb-1">Pemberitahuan Terbaru</li>
-                            <li>
-                                <a class="dropdown-item rounded-2 py-2 small text-wrap" href="#">
-                                    <div class="fw-semibold text-brand">Tugas Baru: Speaking Practice</div>
-                                    <span class="text-muted" style="font-size: 0.75rem;">Tenggat besok pukul 23:59 WIB</span>
-                                </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 p-2" style="width: 300px;">
+                            <li class="px-2 py-1 d-flex justify-content-between align-items-center border-bottom mb-1">
+                                <span class="fw-bold small">Pemberitahuan</span>
+                                @if(($studentNotifications ?? collect())->isNotEmpty())
+                                    <span class="badge bg-brand-soft text-brand rounded-pill">{{ $studentNotifications->count() }}</span>
+                                @endif
                             </li>
-                            <li>
-                                <a class="dropdown-item rounded-2 py-2 small text-wrap" href="#">
-                                    <div class="fw-semibold">Kelas Live dimulai 30 menit lagi</div>
-                                    <span class="text-muted" style="font-size: 0.75rem;">Academic English — Ruang A</span>
-                                </a>
-                            </li>
+
+                            @forelse($studentNotifications ?? [] as $notif)
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 small text-wrap d-flex align-items-start gap-2" href="{{ $notif['url'] }}">
+                                        <i class="bi {{ $notif['icon'] }} {{ $notif['color'] }} mt-1"></i>
+                                        <div>
+                                            <div class="fw-semibold text-dark lh-sm mb-1">{{ $notif['title'] }}</div>
+                                            <span class="text-muted d-block" style="font-size: 0.74rem;">{{ $notif['subtitle'] }}</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            @empty
+                                <li class="px-2 py-4 text-center text-muted small">
+                                    <i class="bi bi-bell-slash d-block fs-5 mb-1"></i>
+                                    Tidak ada pemberitahuan baru
+                                </li>
+                            @endforelse
                         </ul>
                     </div>
 
@@ -184,7 +200,7 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profil Saya</a></li>
+                            <li><a class="dropdown-item" href="{{ route('student.profile.edit') }}"><i class="bi bi-person me-2"></i>Profil Saya</a></li>
                             <li><a class="dropdown-item" href="{{ url('/') }}"><i class="bi bi-house me-2"></i>Halaman Depan</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
@@ -204,6 +220,27 @@
         <!-- KONTEN DINAMIS MURID -->
         <main class="flex-grow-1 p-3 p-lg-4">
             <div class="container-fluid px-0" style="max-width: 1280px;">
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>{{ $errors->first() }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </main>

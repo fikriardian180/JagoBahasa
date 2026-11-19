@@ -367,3 +367,10 @@ header.sticky-top {
     }
 }
 /* AKHIR LAYOUT STUDENT DASHBOARDDDDDDDDDDDDDDDDDDDDDDDDD  */
+
+/* ASSIGNMENT */
+#assignmentFilterTabs .nav-link.active {
+    background-color: var(--jb-primary) !important;
+    color: #ffffff !important;
+}
+/* ASSIGNMENT */

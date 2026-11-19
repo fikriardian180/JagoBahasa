@@ -34,8 +34,6 @@
                     <option value="all">Semua Program Bahasa</option>
                     <option value="Bahasa Inggris">Bahasa Inggris</option>
                     <option value="Bahasa Arab">Bahasa Arab</option>
-                    <option value="Bahasa Jepang">Bahasa Jepang</option>
-                    <option value="Bahasa Korea">Bahasa Korea</option>
                 </select>
             </div>
             <div class="col-md-3 text-md-end">
@@ -138,6 +136,10 @@
             item.style.display = (matchText && matchLang) ? '' : 'none';
         });
     };
+
+    document.querySelector('#filterLanguageSelect').addEventListener('change', function() {
+    this.form.submit();
+    });
 
     searchInput?.addEventListener('input', filterCourses);
     langSelect?.addEventListener('change', filterCourses);

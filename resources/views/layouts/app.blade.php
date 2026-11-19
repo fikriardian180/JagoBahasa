@@ -45,11 +45,11 @@
                 <div class="collapse navbar-collapse" id="mainNavbar">
                     @auth
                         <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-2">
-                            <li class="nav-item"><a class="nav-link active fw-medium" href="#">Dashboard</a></li>
-                            <li class="nav-item"><a class="nav-link fw-medium" href="#">Kursus</a></li>
-                            <li class="nav-item"><a class="nav-link fw-medium" href="#">Tugas</a></li>
-                            <li class="nav-item"><a class="nav-link fw-medium" href="#">Kelas Online</a></li>
-                            <li class="nav-item"><a class="nav-link fw-medium" href="#">Kalender</a></li>
+                            <li class="nav-item"><a class="nav-link active fw-medium" href="{{ route('student.dashboard') }}">Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.courses.index') }}">Kursus</a></li>
+                            <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.assignments.index') }}">Tugas</a></li>
+                            <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.live-classes') }}">Kelas Online</a></li>
+                            <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.calendar') }}">Kalender</a></li>
                         </ul>
                     @else
                         <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-2">

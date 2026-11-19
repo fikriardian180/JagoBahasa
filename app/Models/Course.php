@@ -22,4 +22,14 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class, 'course_user');
     }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class)->orderBy('due_date', 'asc');
+    }
+
+    public function liveClasses()
+    {
+        return $this->hasMany(LiveClass::class)->orderBy('scheduled_at', 'asc');
+    }
 }

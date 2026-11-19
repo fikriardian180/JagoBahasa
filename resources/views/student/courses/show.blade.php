@@ -122,7 +122,7 @@
                         <small class="text-muted d-block mb-2">
                             <i class="bi bi-clock me-1"></i>Tenggat: {{ \Carbon\Carbon::parse($assignment->due_date)->format('d M Y, H:i') }}
                         </small>
-                        <a href="#" class="btn btn-outline-brand btn-sm w-100 rounded-3 fw-semibold">Kerjakan Tugas</a>
+                        <a href="{{ route('student.assignments.show', $assignment->id) }}" class="btn btn-outline-brand btn-sm w-100 rounded-3 fw-semibold">Kerjakan Tugas</a>
                     </div>
                 @empty
                     <p class="text-muted small mb-0">Belum ada tugas aktif untuk kelas ini.</p>
