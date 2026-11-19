@@ -42,14 +42,6 @@
                             <input type="password" name="password" class="form-control rounded-3" placeholder="••••••••" required>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="role" class="form-label small fw-semibold">Masuk Sebagai</label>
-                            <select name="role" id="role" class="form-select rounded-3" required>
-                                <option value="student" {{ old('role') === 'student' ? 'selected' : '' }}>Murid (Pelajar)</option>
-                                <option value="teacher" {{ old('role') === 'teacher' ? 'selected' : '' }}>Guru (Pengajar)</option>
-                            </select>
-                        </div>
-
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="remember" id="remember">

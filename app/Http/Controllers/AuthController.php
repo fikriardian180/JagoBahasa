@@ -16,31 +16,69 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+
+    // Ambil semua akun dengan email tersebut (bisa student, teacher, atau admin)
+    $users = User::where('email', $credentials['email'])->get();
+
+    // Filter akun yang password-nya cocok
+    $matchedUsers = $users->filter(fn ($user) => Hash::check($credentials['password'], $user->password))->values();
+
+    if ($matchedUsers->isEmpty()) {
+        return back()->withErrors([
+            'email' => 'Email atau kata sandi yang Anda masukkan salah.',
+        ])->onlyInput('email');
+    }
+
+    // Jika hanya 1 peran yang cocok -> langsung login otomatis!
+    if ($matchedUsers->count() === 1) {
+        $user = $matchedUsers->first();
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
+
+        return $this->redirectByRole($user->role);
+    }
+
+    // Jika email & password kembar di 2 peran (Murid & Guru) -> simpan sementara di session untuk dipilih
+    $request->session()->put('pending_role_selection', [
+        'user_ids' => $matchedUsers->pluck('id')->all(),
+        'remember' => $request->boolean('remember'),
+    ]);
+
+    return view('auth.select-role', ['accounts' => $matchedUsers]);
+    }
+
+    public function selectRole(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-            'role' => ['required', 'in:student,teacher,admin'],
-        ], [
-            'role.required' => 'Silakan pilih peran akun (Murid atau Guru).',
-        ]);
+        $pending = $request->session()->get('pending_role_selection');
+        $request->validate(['user_id' => ['required', 'integer']]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
-
-            $role = Auth::user()->role;
-            if ($role === 'admin') {
-                return redirect()->intended('/admin/dashboard');
-            } elseif ($role === 'teacher') {
-                return redirect()->intended(route('teacher.dashboard'));
-            }
-
-            return redirect()->intended(route('student.dashboard'));
+        if (! $pending || ! in_array((int) $request->user_id, $pending['user_ids'], true)) {
+            return redirect()->route('login');
         }
 
-        return back()->withErrors([
-            'email' => 'Email, kata sandi, atau peran akun yang Anda pilih tidak cocok.',
-        ])->onlyInput('email', 'role');
+        $user = User::findOrFail($request->user_id);
+        $request->session()->forget('pending_role_selection');
+
+        Auth::login($user, $pending['remember']);
+        $request->session()->regenerate();
+
+        return $this->redirectByRole($user->role);
+    }
+
+    protected function redirectByRole(string $role)
+    {
+        if ($role === 'admin') {
+            return redirect()->intended(route('admin.dashboard'));
+        } elseif ($role === 'teacher') {
+            return redirect()->intended(route('teacher.dashboard'));
+        }
+
+        return redirect()->intended(route('student.dashboard'));
     }
 
     public function showRegister()

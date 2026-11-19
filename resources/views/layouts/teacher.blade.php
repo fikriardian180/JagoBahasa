@@ -117,8 +117,6 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2">
                             <li><a class="dropdown-item" href="{{ route('teacher.profile.edit') }}"><i class="bi bi-person me-2"></i>Profil Saya</a></li>
-                            <li><a class="dropdown-item" href="{{ url('/') }}"><i class="bi bi-house me-2"></i>Halaman Depan</a></li>
-                            <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf

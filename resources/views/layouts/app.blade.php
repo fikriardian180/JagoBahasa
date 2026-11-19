@@ -27,7 +27,7 @@
     <!-- HEADER & NAVBAR -->
     <header class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-jb py-3" id="mainNav">
-            <div class="container">
+            <div class="container-fluid px-4 px-lg-5">
                 <!-- Brand / Logo -->
                 <a class="navbar-brand fw-bold d-flex align-items-center gap-2 text-brand" href="{{ url('/') }}">
                     <span class="brand-icon d-inline-flex align-items-center justify-content-center rounded-3 text-white">
@@ -45,11 +45,22 @@
                 <div class="collapse navbar-collapse" id="mainNavbar">
                     @auth
                         <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-2">
-                            <li class="nav-item"><a class="nav-link active fw-medium" href="{{ route('student.dashboard') }}">Dashboard</a></li>
-                            <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.courses.index') }}">Kursus</a></li>
-                            <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.assignments.index') }}">Tugas</a></li>
-                            <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.live-classes') }}">Kelas Online</a></li>
-                            <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.calendar') }}">Kalender</a></li>
+                            @if (Auth::user()->role === 'admin')
+                                <li class="nav-item"><a class="nav-link active fw-medium" href="{{ route('admin.dashboard') }}">Dashboard Admin</a></li>
+                                <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('admin.users') }}">Data Murid &amp; Guru</a></li>
+                                <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('admin.grades') }}">Rekap Nilai</a></li>
+                            @elseif (Auth::user()->role === 'teacher')
+                                <li class="nav-item"><a class="nav-link active fw-medium" href="{{ route('teacher.dashboard') }}">Dashboard Guru</a></li>
+                                <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('teacher.courses.index') }}">Kelas Diampu</a></li>
+                                <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('teacher.assignments.index') }}">Tugas &amp; Penilaian</a></li>
+                                <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('teacher.live-classes.index') }}">Jadwal Live</a></li>
+                            @else
+                                <li class="nav-item"><a class="nav-link active fw-medium" href="{{ route('student.dashboard') }}">Dashboard</a></li>
+                                <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.courses.index') }}">Kursus</a></li>
+                                <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.assignments.index') }}">Tugas</a></li>
+                                <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.live-classes') }}">Kelas Online</a></li>
+                                <li class="nav-item"><a class="nav-link fw-medium" href="{{ route('student.calendar') }}">Kalender</a></li>
+                            @endif
                         </ul>
                     @else
                         <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-2">
@@ -60,12 +71,14 @@
                         </ul>
                     @endauth
 
-                    <!-- Aksi Kanan -->
-                    <div class="d-flex align-items-center gap-2 flex-wrap mt-3 mt-lg-0">
+                    <!-- Aksi Kanan (Rapat ke Ujung Kanan) -->
+                    <div class="d-flex align-items-center gap-2 flex-wrap mt-3 mt-lg-0 ms-lg-auto">
                         @auth
-                            <button type="button" class="btn btn-outline-brand btn-sm fw-semibold px-3 rounded-3" data-bs-toggle="modal" data-bs-target="#joinCourseModal">
-                                <i class="bi bi-plus-lg me-1"></i>Gabung Kode
-                            </button>
+                            @if (Auth::user()->role === 'student')
+                                <button type="button" class="btn btn-outline-brand btn-sm fw-semibold px-3 rounded-3" data-bs-toggle="modal" data-bs-target="#joinCourseModal">
+                                    <i class="bi bi-plus-lg me-1"></i>Gabung Kode
+                                </button>
+                            @endif
                         @endauth
 
                         <!-- Menu Pengganti Bahasa -->
@@ -96,8 +109,8 @@
                         @auth
                             @php
                                 $dashboardUrl = match(Auth::user()->role) {
-                                    'admin' => url('/admin/dashboard'),
-                                    'teacher' => url('/teacher/dashboard'),
+                                    'admin' => route('admin.dashboard'),
+                                    'teacher' => route('teacher.dashboard'),
                                     default => route('student.dashboard'),
                                 };
                             @endphp
@@ -105,7 +118,7 @@
                             <div class="dropdown">
                                 <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle ps-2" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="avatar-circle bg-brand text-white fw-bold me-2">
-                                        {{ substr(Auth::user()->name ?? 'U', 0, 1) }}
+                                        {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
                                     </div>
                                     <span class="d-none d-xl-inline text-dark fw-medium small">
                                         {{ Auth::user()->name ?? 'Profil' }}
@@ -175,7 +188,7 @@
                     <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
                         <li><a href="{{ route('login') }}" class="text-muted text-decoration-none">Masuk ke Dashboard</a></li>
                         <li><a href="#panduan" class="text-muted text-decoration-none">Gabung Kelas dengan Kode</a></li>
-                        <li><a href="#katalog" class="text-muted text-decoration-none">Silabus & Kurikulum</a></li>
+                        <li><a href="#katalog" class="text-muted text-decoration-none">Silabus &amp; Kurikulum</a></li>
                     </ul>
                 </div>
             </div>
@@ -189,24 +202,27 @@
 
     <!-- MODAL GABUNG KURSUS -->
     @auth
-    <div class="modal fade" id="joinCourseModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow rounded-4">
-                <div class="modal-header border-bottom-0">
-                    <h5 class="modal-title fw-bold">Gabung Kursus dengan Kode</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body pt-0">
-                    <p class="text-muted small">Masukkan kode kelas dari pengajar untuk bergabung ke kursus.</p>
-                    <input type="text" class="form-control form-control-lg text-uppercase" placeholder="Contoh: JGB-2026">
-                </div>
-                <div class="modal-footer border-top-0">
-                    <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-brand rounded-3 px-4">Gabung</button>
+        @if (Auth::user()->role === 'student')
+            <div class="modal fade" id="joinCourseModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <form action="{{ route('student.courses.join') }}" method="POST" class="modal-content border-0 shadow rounded-4">
+                        @csrf
+                        <div class="modal-header border-bottom-0">
+                            <h5 class="modal-title fw-bold">Gabung Kursus dengan Kode</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                        </div>
+                        <div class="modal-body pt-0">
+                            <p class="text-muted small">Masukkan kode kelas dari pengajar untuk bergabung ke kursus.</p>
+                            <input type="text" name="class_code" class="form-control form-control-lg text-uppercase font-monospace" placeholder="Contoh: JGB-2026" required>
+                        </div>
+                        <div class="modal-footer border-top-0">
+                            <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-brand rounded-3 px-4 fw-semibold">Gabung</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>
-    </div>
+        @endif
     @endauth
 
     <!-- Scripts -->
@@ -219,15 +235,12 @@
         const navLinks = document.querySelectorAll('#mainNavbar .nav-link[href^="#"]');
         const sections = document.querySelectorAll('section[id]');
 
-        // Fungsi deteksi posisi scroll (Scroll-Spy)
         const handleScroll = () => {
-            // 1. Efek shadow navbar saat scroll
             if (window.scrollY > 30) nav.classList.add('scrolled');
             else nav.classList.remove('scrolled');
 
-            // 2. Deteksi section yang sedang dilihat
             let currentSectionId = '';
-            const scrollPosition = window.scrollY + 140; // Offset tinggi navbar
+            const scrollPosition = window.scrollY + 140;
 
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
@@ -237,12 +250,10 @@
                 }
             });
 
-            // Jika sudah di paling bawah halaman, aktifkan menu terakhir (#panduan)
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
                 currentSectionId = 'panduan';
             }
 
-            // Terapkan class active ke link navbar yang sesuai
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (currentSectionId && link.getAttribute('href') === `#${currentSectionId}`) {
@@ -254,7 +265,6 @@
         window.addEventListener('scroll', handleScroll);
         window.addEventListener('load', handleScroll);
 
-        // Smooth scroll + tutup menu mobile otomatis saat link diklik
         navLinks.forEach(link => {
             link.addEventListener('click', function (e) {
                 const targetId = this.getAttribute('href');

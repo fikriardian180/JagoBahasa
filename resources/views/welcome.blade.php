@@ -3,6 +3,16 @@
 @section('title', 'JagoBahasa — Platform LMS Pembelajaran Bahasa Terpadu')
 
 @section('fullwidth_content')
+    @php
+        $dashboardUrl = auth()->check()
+            ? match(Auth::user()->role) {
+                'admin' => route('admin.dashboard'),
+                'teacher' => route('teacher.dashboard'),
+                default => route('student.dashboard'),
+            }
+            : route('login');
+    @endphp
+
     <!-- 1. HERO SECTION: INTERAKTIF & BERKARAKTER LMS -->
     <section class="hero-lms" id="beranda">
         <div class="container">
@@ -24,7 +34,7 @@
 
                     <div class="d-flex flex-wrap gap-3">
                         @auth
-                            <a href="{{ route('student.dashboard') }}" class="btn btn-brand btn-lg fw-semibold px-4 rounded-3">
+                            <a href="{{ $dashboardUrl }}" class="btn btn-brand btn-lg fw-semibold px-4 rounded-3">
                                 Buka Dashboard Saya <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         @else
@@ -38,7 +48,7 @@
                     </div>
                 </div>
 
-                <!-- Kolom Kanan: Simulasi Pratinjau UI LMS (Bukan Foto Statis) -->
+                <!-- Kolom Kanan: Simulasi Pratinjau UI LMS -->
                 <div class="col-lg-6" data-aos="fade-up" data-aos-delay="150">
                     <div class="lms-preview-card">
                         <div class="lms-window-bar">
@@ -140,7 +150,7 @@
         </div>
     </section>
 
-    <!-- 3. METODE BELAJAR INTERAKTIF (TAB KLIK LANGSUNG) -->
+    <!-- 3. METODE BELAJAR INTERAKTIF -->
     <section class="py-5 bg-white border-top border-bottom" id="metode">
         <div class="container py-lg-3">
             <div class="row align-items-center gy-4">
@@ -194,7 +204,7 @@
                                     <small class="text-muted">Terintegrasi dengan menu Kelas Online &amp; Kalender</small>
                                 </div>
                             </div>
-                            <p class="text-muted">Pengajar dapat menjadwalkan sesi praktik percakapan (*speaking*) dan tautan pertemuan langsung muncul di dashboard siswa.</p>
+                            <p class="text-muted">Pengajar dapat menjadwalkan sesi praktik percakapan (<em>speaking</em>) dan tautan pertemuan langsung muncul di dashboard siswa.</p>
                             <ul class="list-unstyled d-flex flex-column gap-2 mb-0 small">
                                 <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Pengingat jadwal otomatis di halaman Kalender Akademik.</li>
                                 <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Rekap presensi kehadiran terintegrasi dalam sistem.</li>
@@ -210,7 +220,7 @@
                                     <small class="text-muted">Pantau perkembangan kemampuan bahasa Anda</small>
                                 </div>
                             </div>
-                            <p class="text-muted">Kumpulkan tugas menulis (*writing*) maupun rekaman pelafalan langsung melalui portal tugas dan terima koreksi dari pengajar.</p>
+                            <p class="text-muted">Kumpulkan tugas menulis (<em>writing</em>) maupun rekaman pelafalan langsung melalui portal tugas dan terima koreksi dari pengajar.</p>
                             <ul class="list-unstyled d-flex flex-column gap-2 mb-0 small">
                                 <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Status pengumpulan tugas jelas (Terkumpul, Dinilai, atau Tenggat).</li>
                                 <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Grafik persentase penyelesaian materi di halaman Dashboard.</li>
@@ -223,8 +233,9 @@
     </section>
 
     <!-- 4. KATALOG PROGRAM BAHASA -->
-    <section class="py-5" id="katalog">
-        <div class="row g-4 justify-content-center">
+    <section class="py-5" id="program">
+        <div class="container">
+            <div class="row g-4 justify-content-center">
                 <div class="col-md-6 col-lg-5" data-aos="fade-up">
                     <div class="lang-card d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -233,7 +244,7 @@
                         </div>
                         <h5 class="fw-bold">Bahasa Inggris</h5>
                         <p class="text-muted small flex-grow-1">Grammar, academic writing, listening comprehension, dan public speaking.</p>
-                        <a href="{{ auth()->check() ? route('student.courses.index') : route('login') }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">Masuk Kelas</a>
+                        <a href="{{ $dashboardUrl }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">Masuk Kelas</a>
                     </div>
                 </div>
 
@@ -245,14 +256,15 @@
                         </div>
                         <h5 class="fw-bold">Bahasa Arab</h5>
                         <p class="text-muted small flex-grow-1">Kaidah nahwu &amp; sharaf, percakapan aktif (kalam), serta pemahaman teks.</p>
-                        <a href="{{ auth()->check() ? route('student.courses.index') : route('login') }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">Masuk Kelas</a>
+                        <a href="{{ $dashboardUrl }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">Masuk Kelas</a>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 
     <!-- 5. CARA BERGABUNG DENGAN KODE KELAS -->
-    <section class="py-5" id="panduan">
+    <section class="py-5" id="cara-bergabung">
         <div class="container">
             <div class="rounded-4 p-4 p-md-5 text-white" style="background: linear-gradient(120deg, #047857 0%, #064e3b 100%);" data-aos="zoom-in">
                 <div class="row align-items-center gy-4">
@@ -265,22 +277,12 @@
                     </div>
                     <div class="col-lg-4 text-lg-end">
                         @auth
-                            @php
-                                $dashUrl = match(Auth::user()->role) {
-                                    'admin' => url('/admin/dashboard'),
-                                    'teacher' => url('/teacher/dashboard'),
-                                    default => route('student.dashboard'),
-                                };
-                            @endphp
-                            <a href="{{ $dashUrl }}" class="btn btn-brand btn-lg fw-semibold px-4 rounded-3">
+                            <a href="{{ $dashboardUrl }}" class="btn btn-light text-brand btn-lg fw-bold px-4 rounded-3 shadow-sm">
                                 Buka Dashboard Saya <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         @else
-                            <a href="{{ route('login') }}" class="btn btn-brand btn-lg fw-semibold px-4 rounded-3">
-                                Mulai Belajar Sekarang <i class="bi bi-arrow-right ms-1"></i>
-                            </a>
-                            <a href="#metode" class="btn btn-outline-brand btn-lg fw-semibold px-4 rounded-3">
-                                Eksplorasi Fitur
+                            <a href="{{ route('login') }}" class="btn btn-light text-brand btn-lg fw-bold px-4 rounded-3 shadow-sm">
+                                Masuk &amp; Gabung <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         @endauth
                     </div>
@@ -292,7 +294,6 @@
 
 @push('scripts')
 <script>
-    // 1. Animasi Pergantian Bahasa & Sapaan di Hero Section
     const languages = [
         { name: 'Inggris', greeting: 'Hello! Welcome to Jago Bahasa' },
         { name: 'Arab', greeting: 'مرحباً! أهلاً بكم في Jago Bahasa' },
@@ -314,7 +315,6 @@
         }, 3000);
     }
 
-    // 2. Animasi Counter Angka Metrik
     const counters = document.querySelectorAll('.counter');
     const animateCounters = () => {
         counters.forEach(counter => {
