@@ -10,11 +10,16 @@
     --jb-muted: #64748b;
 }
 
+html, body {
+    max-width: 100%;
+    overflow-x: clip;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--jb-bg);
     color: var(--jb-text);
-    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
 }
 
 h1, h2, h3, h4, h5, h6, .font-display {
@@ -27,7 +32,11 @@ h1, h2, h3, h4, h5, h6, .font-display {
 
 /* --- NAVBAR --- */
 header.sticky-top {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
     z-index: 1050 !important;
+    background-color: #ffffff;
 }
 
 .navbar-jb {
@@ -283,17 +292,20 @@ header.sticky-top {
 .student-sidebar {
     width: 265px;
     height: 100vh;
+    height: 100dvh;
     position: fixed;
     top: 0;
     left: 0;
     background: #ffffff;
     border-right: 1px solid #e2e8f0;
     z-index: 1045;
+    overflow-y: auto;
     transition: transform 0.3s ease;
 }
 
 .student-main-wrapper {
     margin-left: 265px;
+    min-width: 0;
     transition: margin-left 0.3s ease;
 }
 
@@ -343,27 +355,146 @@ header.sticky-top {
 
 /* Responsif Layar Tablet & HP (< 992px) */
 @media (max-width: 991.98px) {
-    .student-sidebar {
-        transform: translateX(-100%);
+    /* Navbar Collapse Landing Page */
+    #mainNavbar {
+        padding-top: 0.75rem;
+        padding-bottom: 0.5rem;
+        border-top: 1px solid #f1f5f9;
+        margin-top: 0.75rem;
     }
+
+    #mainNavbar .nav-link {
+        padding: 0.65rem 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    #mainNavbar .nav-link.active::after {
+        display: none;
+    }
+
+    /* Sidebar Portal (Murid / Guru / Admin) */
+    .student-sidebar {
+        width: 265px;
+        max-width: 82vw;
+        transform: translateX(-100%);
+        box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+    }
+
     .student-sidebar.show {
         transform: translateX(0);
     }
+
     .student-main-wrapper {
         margin-left: 0;
+        width: 100%;
     }
+
     .sidebar-backdrop {
         position: fixed;
         inset: 0;
         background: rgba(15, 23, 42, 0.45);
+        backdrop-filter: blur(2px);
         z-index: 1040;
         opacity: 0;
         visibility: hidden;
         transition: all 0.25s ease;
     }
+
     .sidebar-backdrop.show {
         opacity: 1;
         visibility: visible;
+    }
+
+    /* Hero & Section Spacing */
+    .hero-lms {
+        padding: 44px 0 56px;
+    }
+}
+
+/* Optimasi Khusus Layar Smartphone (< 576px) */
+@media (max-width: 575.98px) {
+    .navbar-brand .fs-4 {
+        font-size: 1.2rem !important;
+    }
+
+    .brand-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+
+    .hero-lms {
+        padding: 32px 0 44px;
+    }
+
+    .hero-lms h1,
+    .hero-lms .display-4,
+    .hero-lms .display-5 {
+        font-size: 1.85rem !important;
+        line-height: 1.25;
+    }
+
+    .greeting-pill {
+        font-size: 0.78rem;
+        padding: 5px 11px;
+    }
+
+    /* Mencegah kartu & modal mepet ke tepi layar HP */
+    .lms-preview-card {
+        border-radius: 16px;
+    }
+
+    .lms-window-bar {
+        padding: 10px 14px;
+    }
+
+    .course-mini-item {
+        padding: 12px;
+    }
+
+    .metric-box {
+        padding: 1rem 1.15rem;
+    }
+
+    .lang-card {
+        padding: 1.25rem;
+        border-radius: 14px;
+    }
+
+    /* Topbar Portal di HP: Judul halaman tidak terpotong */
+    .student-topbar {
+        padding-left: 0.85rem !important;
+        padding-right: 0.85rem !important;
+    }
+
+    .student-topbar h5,
+    .student-topbar .h5 {
+        font-size: 1rem !important;
+    }
+
+    /* Tab Filter Tugas agar bisa digeser horizontal jika sempit */
+    #assignmentFilterTabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #assignmentFilterTabs .nav-link {
+        white-space: nowrap;
+        font-size: 0.85rem;
+    }
+
+    /* Tabel agar tetap rapi saat digeser ke samping di HP */
+    .table-responsive th,
+    .table-responsive td {
+        white-space: nowrap;
+    }
+
+    /* Mencegah auto-zoom browser mobile saat fokus ke input/textarea */
+    .form-control,
+    .form-select {
+        font-size: 16px !important;
     }
 }
 /* AKHIR LAYOUT STUDENT DASHBOARDDDDDDDDDDDDDDDDDDDDDDDDD  */
@@ -374,3 +505,46 @@ header.sticky-top {
     color: #ffffff !important;
 }
 /* ASSIGNMENT */
+
+/* =========================================
+   OPTIMASI MOBILE GLOBAL UNTUK PORTAL STUDENT
+   ========================================= */
+@media (max-width: 575.98px) {
+    /* Perkecil padding kartu p-4 / p-5 di layar HP agar ruang konten lebih luas */
+    .student-main-wrapper .card.p-4,
+    .student-main-wrapper .card.p-5 {
+        padding: 1.15rem !important;
+    }
+
+    .student-main-wrapper .card-body.p-4 {
+        padding: 1.15rem !important;
+    }
+
+    /* Accordion silabus materi (courses/show) */
+    #lessonsAccordion .accordion-button {
+        padding: 0.85rem 1rem;
+        font-size: 0.92rem;
+    }
+
+    #lessonsAccordion .accordion-body {
+        padding: 1rem;
+        font-size: 0.88rem;
+    }
+
+    /* Tautan panjang (misal link Google Drive / Zoom) tidak merusak lebar layar */
+    .student-main-wrapper a {
+        word-break: break-word;
+    }
+
+    /* Kotak skor & tombol submit full-width di halaman pengerjaan tugas/kuis */
+    .student-main-wrapper form button[type="submit"].btn-lg,
+    .student-main-wrapper .card .text-end > button[type="submit"] {
+        width: 100%;
+    }
+
+    /* Badge & teks statistik dashboard */
+    .student-main-wrapper h3.fw-extrabold,
+    .student-main-wrapper h4.fw-extrabold {
+        font-size: 1.45rem !important;
+    }
+}

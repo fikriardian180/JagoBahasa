@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'JagoBahasa — Platform LMS Pembelajaran Bahasa Terpadu')
+@section('title', __('messages.welcome_page_title'))
 
 @section('fullwidth_content')
     @php
@@ -21,28 +21,28 @@
                 <div class="col-lg-6" data-aos="fade-up">
                     <div class="greeting-pill mb-3">
                         <i class="bi bi-chat-dots-fill"></i>
-                        <span id="liveGreeting">Hello! Selamat Datang di JagoBahasa</span>
+                        <span id="liveGreeting">{{ __('messages.hero_badge') }}</span>
                     </div>
 
                     <h1 class="display-5 fw-extrabold mb-3" style="line-height: 1.2;">
-                        Belajar Bahasa <span class="dynamic-word" id="rotatingLang">Inggris</span> Jadi Lebih Terarah &amp; Terukur
+                        {{ __('messages.hero_title_prefix') }} <span class="dynamic-word" id="rotatingLang">{{ __('messages.lang_en_name') }}</span> {{ __('messages.hero_title_suffix') }}
                     </h1>
 
                     <p class="lead text-muted mb-4" style="font-size: 1.05rem; line-height: 1.75;">
-                        Kelola materi kursus, kerjakan latihan kosakata &amp; tata bahasa, hingga ikuti sesi kelas daring bersama pengajar dalam satu ruang belajar digital.
+                        {{ __('messages.hero_subtitle') }}
                     </p>
 
                     <div class="d-flex flex-wrap gap-3">
                         @auth
                             <a href="{{ $dashboardUrl }}" class="btn btn-brand btn-lg fw-semibold px-4 rounded-3">
-                                Buka Dashboard Saya <i class="bi bi-arrow-right ms-1"></i>
+                                {{ __('messages.hero_cta_dashboard') }} <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         @else
                             <a href="{{ route('login') }}" class="btn btn-brand btn-lg fw-semibold px-4 rounded-3">
-                                Mulai Belajar Sekarang <i class="bi bi-arrow-right ms-1"></i>
+                                {{ __('messages.hero_cta_start') }} <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                             <a href="#metode" class="btn btn-outline-brand btn-lg fw-semibold px-4 rounded-3">
-                                Eksplorasi Fitur
+                                {{ __('messages.hero_cta_explore') }}
                             </a>
                         @endauth
                     </div>
@@ -57,17 +57,17 @@
                                 <span style="background: #f59e0b;"></span>
                                 <span style="background: #10b981;"></span>
                             </div>
-                            <small class="text-muted fw-medium">Pratinjau Ruang Belajar Siswa</small>
-                            <span class="badge bg-brand-soft text-brand">Aktif</span>
+                            <small class="text-muted fw-medium">{{ __('messages.preview_header') }}</small>
+                            <span class="badge bg-brand-soft text-brand">{{ __('messages.preview_status') }}</span>
                         </div>
 
                         <div class="p-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <div>
-                                    <h6 class="fw-bold mb-0">Kursus Saya Semester Ini</h6>
-                                    <small class="text-muted">Progres pembelajaran mingguan</small>
+                                    <h6 class="fw-bold mb-0">{{ __('messages.preview_courses_title') }}</h6>
+                                    <small class="text-muted">{{ __('messages.preview_courses_sub') }}</small>
                                 </div>
-                                <span class="badge bg-brand rounded-pill px-3 py-2">3 Kelas Aktif</span>
+                                <span class="badge bg-brand rounded-pill px-3 py-2">{{ __('messages.preview_active_badge') }}</span>
                             </div>
 
                             <!-- Item Kelas Simulasi 1 -->
@@ -105,11 +105,11 @@
                                         <i class="bi bi-camera-video-fill fs-5"></i>
                                     </div>
                                     <div>
-                                        <div class="fw-bold small">Sesi Live: Pronunciation Drill</div>
-                                        <small class="text-muted">Hari ini, 15:30 WIB &bull; Ruang Virtual A</small>
+                                        <div class="fw-bold small">{{ __('messages.preview_live_title') }}</div>
+                                        <small class="text-muted">{{ __('messages.preview_live_sub') }}</small>
                                     </div>
                                 </div>
-                                <span class="badge bg-white text-dark border">Siap</span>
+                                <span class="badge bg-white text-dark border">{{ __('messages.preview_ready') }}</span>
                             </div>
                         </div>
                     </div>
@@ -124,26 +124,26 @@
             <div class="row g-4">
                 <div class="col-6 col-lg-3" data-aos="fade-up">
                     <div class="metric-box">
-                        <h3 class="fw-extrabold text-brand mb-1"><span class="counter" data-target="2">0</span> Bahasa</h3>
-                        <small class="text-muted">Kurikulum terstandar</small>
+                        <h3 class="fw-extrabold text-brand mb-1"><span class="counter" data-target="2">0</span> {{ __('messages.metric_lang_unit') }}</h3>
+                        <small class="text-muted">{{ __('messages.metric_lang_desc') }}</small>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="80">
                     <div class="metric-box">
-                        <h3 class="fw-extrabold text-brand mb-1"><span class="counter" data-target="50">0</span>+ Modul</h3>
-                        <small class="text-muted">Materi teks, audio &amp; video</small>
+                        <h3 class="fw-extrabold text-brand mb-1"><span class="counter" data-target="50">0</span>{{ __('messages.metric_mod_unit') }}</h3>
+                        <small class="text-muted">{{ __('messages.metric_mod_desc') }}</small>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="160">
                     <div class="metric-box">
-                        <h3 class="fw-extrabold text-brand mb-1"><span class="counter" data-target="150">0</span>+ Kuis</h3>
-                        <small class="text-muted">Evaluasi tata bahasa otomatis</small>
+                        <h3 class="fw-extrabold text-brand mb-1"><span class="counter" data-target="150">0</span>{{ __('messages.metric_quiz_unit') }}</h3>
+                        <small class="text-muted">{{ __('messages.metric_quiz_desc') }}</small>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="240">
                     <div class="metric-box">
-                        <h3 class="fw-extrabold text-brand mb-1"><span class="counter" data-target="24">0</span>/7 Akses</h3>
-                        <small class="text-muted">Belajar fleksibel dari mana saja</small>
+                        <h3 class="fw-extrabold text-brand mb-1"><span class="counter" data-target="24">0</span>{{ __('messages.metric_access_unit') }}</h3>
+                        <small class="text-muted">{{ __('messages.metric_access_desc') }}</small>
                     </div>
                 </div>
             </div>
@@ -155,24 +155,24 @@
         <div class="container py-lg-3">
             <div class="row align-items-center gy-4">
                 <div class="col-lg-5" data-aos="fade-right">
-                    <span class="badge bg-brand-soft text-brand fw-bold px-3 py-2 mb-2">Fitur Utama LMS</span>
-                    <h2 class="fw-extrabold mb-3">Satu Sistem untuk Seluruh Alur Belajar</h2>
-                    <p class="text-muted mb-4">Pilih pilar pembelajaran di bawah untuk melihat bagaimana JagoBahasa mendampingi proses belajar Anda.</p>
+                    <span class="badge bg-brand-soft text-brand fw-bold px-3 py-2 mb-2">{{ __('messages.method_badge') }}</span>
+                    <h2 class="fw-extrabold mb-3">{{ __('messages.method_title') }}</h2>
+                    <p class="text-muted mb-4">{{ __('messages.method_subtitle') }}</p>
 
                     <div class="nav flex-column nav-pills method-nav gap-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <button class="nav-link active" id="tab-materi" data-bs-toggle="pill" data-bs-target="#content-materi" type="button" role="tab">
-                            <div class="fw-bold"><i class="bi bi-journal-richtext me-2"></i>1. Modul Terstruktur &amp; Bertahap</div>
-                            <small class="text-muted d-block mt-1">Materi disusun per bab lengkap dengan rangkuman kosakata.</small>
+                            <div class="fw-bold"><i class="bi bi-journal-richtext me-2"></i>{{ __('messages.tab1_title') }}</div>
+                            <small class="text-muted d-block mt-1">{{ __('messages.tab1_sub') }}</small>
                         </button>
 
                         <button class="nav-link" id="tab-live" data-bs-toggle="pill" data-bs-target="#content-live" type="button" role="tab">
-                            <div class="fw-bold"><i class="bi bi-camera-video me-2"></i>2. Kelas Online &amp; Kalender Jadwal</div>
-                            <small class="text-muted d-block mt-1">Terhubung langsung dengan sesi tatap muka daring pengajar.</small>
+                            <div class="fw-bold"><i class="bi bi-camera-video me-2"></i>{{ __('messages.tab2_title') }}</div>
+                            <small class="text-muted d-block mt-1">{{ __('messages.tab2_sub') }}</small>
                         </button>
 
                         <button class="nav-link" id="tab-tugas" data-bs-toggle="pill" data-bs-target="#content-tugas" type="button" role="tab">
-                            <div class="fw-bold"><i class="bi bi-ui-checks me-2"></i>3. Tugas &amp; Penilaian Real-Time</div>
-                            <small class="text-muted d-block mt-1">Pengumpulan tugas dan rekap nilai otomatis di satu halaman.</small>
+                            <div class="fw-bold"><i class="bi bi-ui-checks me-2"></i>{{ __('messages.tab3_title') }}</div>
+                            <small class="text-muted d-block mt-1">{{ __('messages.tab3_sub') }}</small>
                         </button>
                     </div>
                 </div>
@@ -184,14 +184,14 @@
                             <div class="d-flex align-items-center gap-3 mb-3">
                                 <div class="bg-brand text-white rounded-3 p-3"><i class="bi bi-journal-bookmark-fill fs-3"></i></div>
                                 <div>
-                                    <h4 class="fw-bold mb-0">Akses Materi Kapan Saja</h4>
-                                    <small class="text-muted">Terorganisir berdasarkan tingkat kemahiran</small>
+                                    <h4 class="fw-bold mb-0">{{ __('messages.tab1_panel_title') }}</h4>
+                                    <small class="text-muted">{{ __('messages.tab1_panel_sub') }}</small>
                                 </div>
                             </div>
-                            <p class="text-muted">Setiap mata kursus dibagi ke dalam pertemuan mingguan sehingga peserta didik tidak kebingungan menentukan urutan belajar.</p>
+                            <p class="text-muted">{{ __('messages.tab1_panel_desc') }}</p>
                             <ul class="list-unstyled d-flex flex-column gap-2 mb-0 small">
-                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Dilengkapi lampiran PDF, audio pelafalan, dan catatan pengajar.</li>
-                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Penanda status selesai pada setiap bab yang telah dipelajari.</li>
+                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>{{ __('messages.tab1_panel_point1') }}</li>
+                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>{{ __('messages.tab1_panel_point2') }}</li>
                             </ul>
                         </div>
 
@@ -200,14 +200,14 @@
                             <div class="d-flex align-items-center gap-3 mb-3">
                                 <div class="bg-brand text-white rounded-3 p-3"><i class="bi bi-calendar-event-fill fs-3"></i></div>
                                 <div>
-                                    <h4 class="fw-bold mb-0">Jadwal Sinkron Tanpa Terlewat</h4>
-                                    <small class="text-muted">Terintegrasi dengan menu Kelas Online &amp; Kalender</small>
+                                    <h4 class="fw-bold mb-0">{{ __('messages.tab2_panel_title') }}</h4>
+                                    <small class="text-muted">{{ __('messages.tab2_panel_sub') }}</small>
                                 </div>
                             </div>
-                            <p class="text-muted">Pengajar dapat menjadwalkan sesi praktik percakapan (<em>speaking</em>) dan tautan pertemuan langsung muncul di dashboard siswa.</p>
+                            <p class="text-muted">{{ __('messages.tab2_panel_desc') }}</p>
                             <ul class="list-unstyled d-flex flex-column gap-2 mb-0 small">
-                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Pengingat jadwal otomatis di halaman Kalender Akademik.</li>
-                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Rekap presensi kehadiran terintegrasi dalam sistem.</li>
+                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>{{ __('messages.tab2_panel_point1') }}</li>
+                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>{{ __('messages.tab2_panel_point2') }}</li>
                             </ul>
                         </div>
 
@@ -216,14 +216,14 @@
                             <div class="d-flex align-items-center gap-3 mb-3">
                                 <div class="bg-brand text-white rounded-3 p-3"><i class="bi bi-award-fill fs-3"></i></div>
                                 <div>
-                                    <h4 class="fw-bold mb-0">Evaluasi &amp; Umpan Balik Cepat</h4>
-                                    <small class="text-muted">Pantau perkembangan kemampuan bahasa Anda</small>
+                                    <h4 class="fw-bold mb-0">{{ __('messages.tab3_panel_title') }}</h4>
+                                    <small class="text-muted">{{ __('messages.tab3_panel_sub') }}</small>
                                 </div>
                             </div>
-                            <p class="text-muted">Kumpulkan tugas menulis (<em>writing</em>) maupun rekaman pelafalan langsung melalui portal tugas dan terima koreksi dari pengajar.</p>
+                            <p class="text-muted">{{ __('messages.tab3_panel_desc') }}</p>
                             <ul class="list-unstyled d-flex flex-column gap-2 mb-0 small">
-                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Status pengumpulan tugas jelas (Terkumpul, Dinilai, atau Tenggat).</li>
-                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Grafik persentase penyelesaian materi di halaman Dashboard.</li>
+                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>{{ __('messages.tab3_panel_point1') }}</li>
+                                <li><i class="bi bi-check-circle-fill text-brand me-2"></i>{{ __('messages.tab3_panel_point2') }}</li>
                             </ul>
                         </div>
                     </div>
@@ -242,9 +242,9 @@
                             <span class="lang-badge-code">EN</span>
                             <span class="badge bg-brand-soft text-brand">CEFR A1–C1</span>
                         </div>
-                        <h5 class="fw-bold">Bahasa Inggris</h5>
-                        <p class="text-muted small flex-grow-1">Grammar, academic writing, listening comprehension, dan public speaking.</p>
-                        <a href="{{ $dashboardUrl }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">Masuk Kelas</a>
+                        <h5 class="fw-bold">{{ __('messages.prog_en_title') }}</h5>
+                        <p class="text-muted small flex-grow-1">{{ __('messages.prog_en_desc') }}</p>
+                        <a href="{{ $dashboardUrl }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">{{ __('messages.btn_enter_class') }}</a>
                     </div>
                 </div>
 
@@ -252,11 +252,11 @@
                     <div class="lang-card d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="lang-badge-code">AR</span>
-                            <span class="badge bg-brand-soft text-brand">Dasar–Mahir</span>
+                            <span class="badge bg-brand-soft text-brand">{{ __('messages.prog_ar_badge') }}</span>
                         </div>
-                        <h5 class="fw-bold">Bahasa Arab</h5>
-                        <p class="text-muted small flex-grow-1">Kaidah nahwu &amp; sharaf, percakapan aktif (kalam), serta pemahaman teks.</p>
-                        <a href="{{ $dashboardUrl }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">Masuk Kelas</a>
+                        <h5 class="fw-bold">{{ __('messages.prog_ar_title') }}</h5>
+                        <p class="text-muted small flex-grow-1">{{ __('messages.prog_ar_desc') }}</p>
+                        <a href="{{ $dashboardUrl }}" class="btn btn-outline-brand btn-sm fw-semibold w-100 mt-3 rounded-3">{{ __('messages.btn_enter_class') }}</a>
                     </div>
                 </div>
             </div>
@@ -269,20 +269,20 @@
             <div class="rounded-4 p-4 p-md-5 text-white" style="background: linear-gradient(120deg, #047857 0%, #064e3b 100%);" data-aos="zoom-in">
                 <div class="row align-items-center gy-4">
                     <div class="col-lg-8">
-                        <span class="badge bg-warning text-dark fw-bold mb-2">Akses Instan</span>
-                        <h2 class="fw-extrabold mb-2">Sudah Punya Kode Kelas dari Pengajar?</h2>
+                        <span class="badge bg-warning text-dark fw-bold mb-2">{{ __('messages.join_badge') }}</span>
+                        <h2 class="fw-extrabold mb-2">{{ __('messages.join_title') }}</h2>
                         <p class="mb-0 text-white-50">
-                            Masuk ke akun JagoBahasa Anda, klik tombol <strong>Gabung Kode</strong> di bagian atas, dan langsung mulai pelajari modul kelas Anda.
+                            {!! __('messages.join_desc_html') !!}
                         </p>
                     </div>
                     <div class="col-lg-4 text-lg-end">
                         @auth
                             <a href="{{ $dashboardUrl }}" class="btn btn-light text-brand btn-lg fw-bold px-4 rounded-3 shadow-sm">
-                                Buka Dashboard Saya <i class="bi bi-arrow-right ms-1"></i>
+                                {{ __('messages.hero_cta_dashboard') }} <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         @else
                             <a href="{{ route('login') }}" class="btn btn-light text-brand btn-lg fw-bold px-4 rounded-3 shadow-sm">
-                                Masuk &amp; Gabung <i class="bi bi-arrow-right ms-1"></i>
+                                {{ __('messages.join_cta') }} <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         @endauth
                     </div>
@@ -295,8 +295,8 @@
 @push('scripts')
 <script>
     const languages = [
-        { name: 'Inggris', greeting: 'Hello! Welcome to Jago Bahasa' },
-        { name: 'Arab', greeting: 'مرحباً! أهلاً بكم في Jago Bahasa' },
+        { name: @json(__('messages.lang_en_name')), greeting: 'Hello! Welcome to Jago Bahasa' },
+        { name: @json(__('messages.lang_ar_name')), greeting: 'مرحباً! أهلاً بكم في Jago Bahasa' },
     ];
 
     let langIndex = 0;

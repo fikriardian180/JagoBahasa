@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CourseController extends Controller
@@ -71,6 +72,13 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         abort_if($course->teacher_id !== Auth::id(), 403);
+
+        // Bersihkan file materi lokal milik bab-bab di kelas ini sebelum menghapus kelas
+        foreach ($course->lessons as $lesson) {
+            if ($lesson->media_url && str_starts_with($lesson->media_url, '/storage/')) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $lesson->media_url));
+            }
+        }
 
         $course->delete();
 

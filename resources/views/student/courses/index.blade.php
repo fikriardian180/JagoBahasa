@@ -1,51 +1,51 @@
 @extends('layouts.student')
 
-@section('title', 'Kursus Saya — JagoBahasa')
-@section('page_title', 'Kursus Saya')
-@section('page_subtitle', 'Daftar seluruh kelas bahasa yang sedang Anda ikuti')
+@section('title', __('messages.student_my_courses') . ' — JagoBahasa')
+@section('page_title', __('messages.student_my_courses'))
+@section('page_subtitle', __('messages.courses_header_sub'))
 
 @section('content')
     <!-- Notifikasi Sukses / Error saat Gabung Kode Kelas -->
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('messages.btn_close') }}"></button>
         </div>
     @endif
 
     @if (session('error'))
         <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('messages.btn_close') }}"></button>
         </div>
     @endif
 
     <!-- BAR FILTER, PENCARIAN & GABUNG KODE -->
     <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
-        <div class="row g-3 align-items-center">
-            <div class="col-md-5">
+        <div class="row g-2 g-sm-3 align-items-center">
+            <div class="col-12 col-md-5">
                 <div class="input-group">
                     <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                    <input type="text" id="searchCourseInput" class="form-control bg-light border-start-0" placeholder="Cari nama kursus atau kode kelas...">
+                    <input type="text" id="searchCourseInput" class="form-control bg-light border-start-0" placeholder="{{ __('messages.courses_search_placeholder') }}">
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-12 col-sm-6 col-md-4">
                 <select id="filterLanguageSelect" class="form-select bg-light">
-                    <option value="all">Semua Program Bahasa</option>
-                    <option value="Bahasa Inggris">Bahasa Inggris</option>
-                    <option value="Bahasa Arab">Bahasa Arab</option>
+                    <option value="all">{{ __('messages.courses_filter_all') }}</option>
+                    <option value="Bahasa Inggris">{{ __('messages.prog_en_title') }}</option>
+                    <option value="Bahasa Arab">{{ __('messages.prog_ar_title') }}</option>
                 </select>
             </div>
-            <div class="col-md-3 text-md-end">
-                <button type="button" class="btn btn-brand w-100 fw-semibold rounded-3" data-bs-toggle="modal" data-bs-target="#joinCourseModal">
-                    <i class="bi bi-plus-lg me-1"></i> Gabung Kelas Baru
+            <div class="col-12 col-sm-6 col-md-3 text-md-end">
+                <button type="button" class="btn btn-brand w-100 fw-semibold rounded-3 py-2" data-bs-toggle="modal" data-bs-target="#joinCourseModal">
+                    <i class="bi bi-plus-lg me-1"></i> {{ __('messages.courses_btn_join_new') }}
                 </button>
             </div>
         </div>
     </div>
 
     <!-- GRID DAFTAR KURSUS -->
-    <div class="row g-4" id="courseGrid">
+    <div class="row g-3 g-sm-4" id="courseGrid">
         @forelse ($courses ?? [] as $course)
             @php
                 // Menghitung progres otomatis dari backend jika relasi tersedia
@@ -54,32 +54,32 @@
                 $progress = $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
             @endphp
 
-            <div class="col-md-6 col-xl-4 course-card-item"
+            <div class="col-12 col-md-6 col-xl-4 course-card-item"
                  data-title="{{ strtolower($course->title . ' ' . $course->class_code) }}"
                  data-language="{{ $course->language }}">
                 <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden d-flex flex-column">
                     <!-- Banner Header Kartu -->
-                    <div class="p-4 text-white position-relative" style="background: linear-gradient(135deg, #047857 0%, #065f46 100%);">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="p-3 p-sm-4 text-white position-relative" style="background: linear-gradient(135deg, #047857 0%, #065f46 100%);">
+                        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
                             <span class="badge bg-white text-brand fw-bold">{{ $course->language }}</span>
                             <span class="badge bg-dark bg-opacity-25 font-monospace">{{ $course->class_code }}</span>
                         </div>
-                        <h5 class="fw-bold mb-1">{{ $course->title }}</h5>
-                        <small class="text-white-50">
-                            <i class="bi bi-person-badge me-1"></i>{{ $course->teacher->name ?? 'Pengajar JagoBahasa' }}
+                        <h5 class="fw-bold mb-1 fs-6 fs-sm-5">{{ $course->title }}</h5>
+                        <small class="text-white-50 d-block text-truncate">
+                            <i class="bi bi-person-badge me-1"></i>{{ $course->teacher->name ?? __('messages.student_default_instructor') }}
                         </small>
                     </div>
 
                     <!-- Isi Kartu & Progres -->
-                    <div class="card-body p-4 d-flex flex-column">
-                        <p class="text-muted small mb-4 flex-grow-1">
+                    <div class="card-body p-3 p-sm-4 d-flex flex-column">
+                        <p class="text-muted small mb-3 mb-sm-4 flex-grow-1">
                             {{ Str::limit($course->description, 100) }}
                         </p>
 
                         <div class="mb-3">
-                            <div class="d-flex justify-content-between small fw-semibold mb-1">
-                                <span class="text-muted">Progres Belajar ({{ $completedLessons }}/{{ $totalLessons }} Bab)</span>
-                                <span class="text-brand">{{ $progress }}%</span>
+                            <div class="d-flex justify-content-between small fw-semibold mb-1 gap-2">
+                                <span class="text-muted text-truncate">{{ __('messages.courses_progress_chapters', ['done' => $completedLessons, 'total' => $totalLessons]) }}</span>
+                                <span class="text-brand flex-shrink-0">{{ $progress }}%</span>
                             </div>
                             <div class="progress" style="height: 8px;">
                                 <div class="progress-bar bg-brand" role="progressbar" style="width: {{ $progress }}%;"></div>
@@ -87,8 +87,8 @@
                         </div>
 
                         <div class="d-flex gap-2">
-                            <a href="{{ route('student.courses.show', $course->id) }}" class="btn btn-brand fw-semibold w-100 rounded-3">
-                                <i class="bi bi-play-circle me-1"></i> Masuk Kelas
+                            <a href="{{ route('student.courses.show', $course->id) }}" class="btn btn-brand fw-semibold w-100 rounded-3 py-2">
+                                <i class="bi bi-play-circle me-1"></i> {{ __('messages.btn_enter_class') }}
                             </a>
                         </div>
                     </div>
@@ -97,17 +97,17 @@
         @empty
             <!-- Tampilan Jika Murid Belum Bergabung di Kelas Mana Pun -->
             <div class="col-12">
-                <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-sm-5 text-center">
                     <div class="mx-auto bg-brand-soft text-brand rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
                         <i class="bi bi-journal-x fs-2"></i>
                     </div>
-                    <h5 class="fw-bold">Belum Ada Kursus yang Diikuti</h5>
+                    <h5 class="fw-bold">{{ __('messages.courses_empty_title') }}</h5>
                     <p class="text-muted small mx-auto mb-4" style="max-width: 420px;">
-                        Anda belum tergabung dalam kelas bahasa apa pun. Silakan masukkan kode kelas dari pengajar untuk mulai belajar.
+                        {{ __('messages.courses_empty_desc') }}
                     </p>
-                    <div>
+                    <div class="d-grid d-sm-block">
                         <button type="button" class="btn btn-brand px-4 py-2 fw-semibold rounded-3" data-bs-toggle="modal" data-bs-target="#joinCourseModal">
-                            <i class="bi bi-plus-circle-fill me-1"></i> Gabung Kode Kelas Sekarang
+                            <i class="bi bi-plus-circle-fill me-1"></i> {{ __('messages.courses_btn_join_now') }}
                         </button>
                     </div>
                 </div>
@@ -136,10 +136,6 @@
             item.style.display = (matchText && matchLang) ? '' : 'none';
         });
     };
-
-    document.querySelector('#filterLanguageSelect').addEventListener('change', function() {
-    this.form.submit();
-    });
 
     searchInput?.addEventListener('input', filterCourses);
     langSelect?.addEventListener('change', filterCourses);

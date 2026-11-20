@@ -25,7 +25,7 @@
             <!-- Form Tambah Materi -->
             <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
                 <h6 class="fw-bold mb-3"><i class="bi bi-plus-square-fill text-brand me-2"></i>Tambah Bab Materi Pembelajaran</h6>
-                <form action="{{ route('teacher.courses.lessons.store', $course->id) }}" method="POST">
+                <form action="{{ route('teacher.courses.lessons.store', $course->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row g-3 mb-3">
                         <div class="col-md-9">
@@ -43,9 +43,23 @@
                         <textarea name="content" rows="4" class="form-control rounded-3" placeholder="Tuliskan penjelasan materi, contoh kalimat, atau kosakata penting..." required></textarea>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label small fw-semibold">Tautan Audio Pelafalan / Video / PDF Pendukung (Opsional)</label>
-                        <input type="url" name="media_url" class="form-control rounded-3" placeholder="https://...">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Unggah File Materi (PDF, Word, PPT, Audio MP3)</label>
+                            <input type="file" name="media_file" class="form-control rounded-3 @error('media_file') is-invalid @enderror" accept=".pdf,.doc,.docx,.ppt,.pptx,.mp3,.wav,.m4a,.jpg,.jpeg,.png">
+                            <small class="text-muted">Maksimal 10 MB.</small>
+                            @error('media_file')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Atau Tautan Eksternal (Opsional)</label>
+                            <input type="url" name="media_url" class="form-control rounded-3 @error('media_url') is-invalid @enderror" placeholder="https://...">
+                            <small class="text-muted">Gunakan jika materi berupa tautan YouTube / Google Drive.</small>
+                            @error('media_url')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-brand btn-sm fw-semibold px-4 py-2 rounded-3">
@@ -66,8 +80,9 @@
                                 <h6 class="fw-bold mb-1">{{ $lesson->title }}</h6>
                                 <p class="text-muted small mb-1">{{ Str::limit($lesson->content, 160) }}</p>
                                 @if ($lesson->media_url)
-                                    <a href="{{ $lesson->media_url }}" target="_blank" class="small text-brand text-decoration-none">
-                                        <i class="bi bi-link-45deg"></i> Lampiran Media
+                                    <a href="{{ $lesson->media_url }}" target="_blank" class="small text-brand fw-semibold text-decoration-none">
+                                        <i class="bi {{ str_starts_with($lesson->media_url, '/storage/') ? 'bi-file-earmark-arrow-down-fill' : 'bi-link-45deg' }}"></i>
+                                        {{ str_starts_with($lesson->media_url, '/storage/') ? 'Lihat / Unduh File Materi' : 'Buka Tautan Media' }}
                                     </a>
                                 @endif
                             </div>

@@ -28,6 +28,14 @@ Route::middleware('guest')->group(function () {
     Route::post('/login/select-role', [AuthController::class, 'selectRole'])->name('login.select-role');
 });
 
+Route::get('/lang/{locale}', function (string $locale) {
+    if (in_array($locale, ['id', 'en'], true)) {
+        session(['locale' => $locale]);
+    }
+
+    return back();
+})->name('lang.switch');
+
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 // Portal Murid
