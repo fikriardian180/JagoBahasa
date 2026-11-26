@@ -26,17 +26,23 @@ class LiveClassController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'course_id' => ['required', 'exists:courses,id'],
+            'course_id' => ['required', 'integer', 'exists:courses,id'],
             'title' => ['required', 'string', 'max:255'],
             'scheduled_at' => ['required', 'date'],
             'duration_minutes' => ['nullable', 'integer', 'min:15', 'max:300'],
-            'meeting_url' => ['required', 'url'],
+            'meeting_url' => [
+                'required',
+                'url:https',
+                'max:255',
+                'regex:/^https:\/\/([a-z0-9-]+\.)?(zoom\.us|meet\.google\.com|teams\.microsoft\.com|youtube\.com|youtu\.be)(\/.*)?$/i',
+            ],
         ], [
             'course_id.required' => 'Silakan pilih kelas tujuan.',
             'title.required' => 'Topik pertemuan wajib diisi.',
             'scheduled_at.required' => 'Waktu pelaksanaan wajib ditentukan.',
             'meeting_url.required' => 'Tautan pertemuan (Zoom / Google Meet) wajib diisi.',
-            'meeting_url.url' => 'Format tautan pertemuan tidak valid (awali dengan https://).',
+            'meeting_url.url' => 'Tautan pertemuan wajib menggunakan protokol aman HTTPS (https://).',
+            'meeting_url.regex' => 'Tautan pertemuan hanya diizinkan dari platform resmi (Zoom, Google Meet, Microsoft Teams, atau YouTube).',
         ]);
 
         // Pastikan kelas dimiliki oleh pengajar yang login
@@ -47,7 +53,7 @@ class LiveClassController extends Controller
             'title' => $validated['title'],
             'scheduled_at' => $validated['scheduled_at'],
             'duration_minutes' => $validated['duration_minutes'] ?? 60,
-            'meeting_url' => $validated['meeting_url'],
+            'meeting_url' => trim($validated['meeting_url']),
         ]);
 
         return back()->with('success', 'Jadwal kelas online berhasil ditambahkan dan diterbitkan ke murid!');

@@ -18,7 +18,12 @@ class LiveClassController extends Controller
             ->whereIn('course_id', $courseIds)
             ->where('scheduled_at', '>=', now()->subHours(2))
             ->orderBy('scheduled_at', 'asc')
-            ->get();
+            ->get()
+            ->each(function ($session) {
+                if (! filter_var($session->meeting_url, FILTER_VALIDATE_URL) || ! str_starts_with(strtolower($session->meeting_url), 'https://')) {
+                    $session->meeting_url = '#';
+                }
+            });
 
         // Riwayat sesi yang sudah lewat
         $pastClasses = LiveClass::with(['course.teacher'])

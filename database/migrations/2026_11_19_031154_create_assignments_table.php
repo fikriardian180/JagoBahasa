@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_id')->constrained()->cascadeOnDelete();
             $table->string('title');
-            $table->enum('type', ['task', 'quiz'])->default('task'); // task = tugas esai/file, quiz = kuis pilihan ganda
+            $table->enum('type', ['assignment', 'task', 'quiz'])->default('assignment');
+            $table->text('description')->nullable();
             $table->text('instructions')->nullable();
             $table->dateTime('due_date');
-            $table->integer('duration_minutes')->nullable(); // khusus kuis (opsional)
+            $table->integer('duration_minutes')->nullable();
             $table->timestamps();
         });
     }
